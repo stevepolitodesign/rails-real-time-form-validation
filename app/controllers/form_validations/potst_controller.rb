@@ -1,2 +1,2 @@
-class FormValidations::PotstController < ApplicationController
+class FormValidations::PotstController < PostsController
 end
