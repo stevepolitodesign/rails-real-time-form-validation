@@ -1,5 +1,7 @@
 <h1>New Post</h1>
 
-<%= render 'form', post: @post %>
+<div data-controller="form-validation" data-form-validation-target="output" data-form-validation-url-value="<%= form_validations_posts_path %>">
+  <%= render 'form', post: @post %>
+</div>
 
 <%= link_to 'Back', posts_path %>

@@ -1,4 +1,4 @@
-<%= form_with(model: post, id: dom_id(post)) do |form| %>
+<%= form_with(model: post, id: dom_id(post), data: { form_validation_target: "form" }) do |form| %>
   <% if post.errors.any? %>
     <div id="error_explanation">
       <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
@@ -13,12 +13,12 @@
 
   <div class="field">
     <%= form.label :title %>
-    <%= form.text_field :title %>
+    <%= form.text_field :title, data: { action: "form-validation#handleChange" } %>
   </div>
 
   <div class="field">
     <%= form.label :body %>
-    <%= form.text_area :body %>
+    <%= form.text_area :body, data: { action: "form-validation#handleChange" } %>
   </div>
 
   <div class="actions">
