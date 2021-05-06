@@ -14,8 +14,21 @@ export default class extends Controller {
       success: (data) => {
         this.outputTarget.innerHTML = data;
         input = document.getElementById(input.id);
-        input.focus();
+        this.moveCursorToEnd(input);
       },
     })
+  }
+
+  // https://css-tricks.com/snippets/javascript/move-cursor-to-end-of-input/
+  moveCursorToEnd(element) {
+    if (typeof element.selectionStart == "number") {
+      element.focus();
+      element.selectionStart = element.selectionEnd = element.value.length;
+    } else if (typeof element.createTextRange != "undefined") {
+      element.focus();
+      var range = element.createTextRange();
+      range.collapse(false);
+      range.select();
+    }
   }
 }
