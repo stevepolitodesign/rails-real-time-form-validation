@@ -7,7 +7,7 @@
     "@rails/ujs": "^6.0.0",
     "@rails/webpacker": "5.2.1",
     "lodash.debounce": "^4.0.8",
-    "stimulus": "^2.0.0"
+    "stimulus": "^2.0.0",
     "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",
