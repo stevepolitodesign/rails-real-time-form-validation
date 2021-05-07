@@ -45,6 +45,13 @@ class FormValidations::PostsController < PostsController
 end
 ```
 
+**What's Going On?**
+
+- We have access to `post_params` becuase we inherit from `PostsController`
+- We call `assign_attributes` in the `update` action because we don't actually want to update the record. We just want to update the record in memory so that we can have it validated.
+- We call `@post.valid?` and `@post.validate` in the `update` and `create` actions respectively to ensure any validation errors get sent to the partial.
+- We only respond with JSON because we're hitting this endpoint with AJAX. We pass `formats: [:html]` to ensure the partial is rendered. Othwerwise Rails would looke for `_form.json.erb`.  
+
 3. Create a namespaced route for the endpoints.
 
 ```ruby
@@ -56,6 +63,10 @@ Rails.application.routes.draw do
   end
 end
 ```
+
+**What's Going On?**
+
+- We don't have to namespace this controller, but it keeps things organized.
 
 ## Step 4: Create Stimulus Controller
 
