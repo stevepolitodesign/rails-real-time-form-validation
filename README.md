@@ -10,7 +10,7 @@
 2. `rails g scaffold Post title body:text`
 3. `rails db:migrate`
 
-## Step 2: Add validations to Post Model
+## Step 2: Add Validations to Post Model
 
 ```ruby
 # app/models/post.rb
@@ -19,7 +19,7 @@ class Post < ApplicationRecord
   validates :title, presence: true
 end
 ```
-## Step 3: Create form validation endpoint
+## Step 3: Create Form Validation Endpoint
 
 1. `rails g controller form_validations/posts`
 2. Update controller to inherit from `PostsController`
@@ -42,7 +42,7 @@ Rails.application.routes.draw do
 end
 ```
 
-## Step 4. Create Stimulus Controller
+## Step 4: Create Stimulus Controller
 
 1. `touch app/javascript/controllers/form_validation_controller.js` 
 
@@ -125,6 +125,83 @@ export default class extends Controller {
 
 <%= link_to 'Show', @post %> |
 <%= link_to 'Back', posts_path %>
+```
+
+## Step 5: Debounce Requests
+
+1. `yarn add lodash.debounce`
+
+```js
+// app/javascript/controllers/form_validation_controller.js
+import Rails from "@rails/ujs"
+import { Controller } from "stimulus"
+const debounce = require('lodash.debounce');
+
+export default class extends Controller {
+  static targets  = [ "form", "output"]
+  static values   = { url: String }
+
+  initialize() {
+    this.handleChange = debounce(this.handleChange, 500).bind(this)
+  }
+
+  handleChange(event) {
+    let input = event.target
+    Rails.ajax({
+      url: this.urlValue,
+      type: "POST",
+      data: new FormData(this.formTarget),
+      success: (data) => {
+        this.outputTarget.innerHTML = data;
+        input = document.getElementById(input.id);
+      },
+    })
+  }
+}
+```
+
+## Step 6: Focus Input
+
+```js
+import Rails from "@rails/ujs"
+import { Controller } from "stimulus"
+const debounce = require('lodash.debounce');
+
+export default class extends Controller {
+  static targets  = [ "form", "output"]
+  static values   = { url: String }
+
+  initialize() {
+    this.handleChange = debounce(this.handleChange, 500).bind(this)
+  }
+
+  handleChange(event) {
+    let input = event.target
+    Rails.ajax({
+      url: this.urlValue,
+      type: "POST",
+      data: new FormData(this.formTarget),
+      success: (data) => {
+        this.outputTarget.innerHTML = data;
+        input = document.getElementById(input.id);
+        this.moveCursorToEnd(input);
+      },
+    })
+  }
+
+  // https://css-tricks.com/snippets/javascript/move-cursor-to-end-of-input/
+  moveCursorToEnd(element) {
+    if (typeof element.selectionStart == "number") {
+      element.focus();
+      element.selectionStart = element.selectionEnd = element.value.length;
+    } else if (typeof element.createTextRange != "undefined") {
+      element.focus();
+      var range = element.createTextRange();
+      range.collapse(false);
+      range.select();
+    }
+  }
+}
 ```
 
 
