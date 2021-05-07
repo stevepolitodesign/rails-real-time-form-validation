@@ -47,6 +47,10 @@ end
 
 **What's Going On?**
 
+When we hit this endpoint we return the form partial as a JSON response. The form partial already handles the logic needed to render errors.
+
+[INSERT IMAGE]
+
 - We have access to `post_params` becuase we inherit from `PostsController`
 - We call `assign_attributes` in the `update` action because we don't actually want to update the record. We just want to update the record in memory so that we can have it validated.
 - We call `@post.valid?` and `@post.validate` in the `update` and `create` actions respectively to ensure any validation errors get sent to the partial.
