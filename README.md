@@ -41,3 +41,90 @@ Rails.application.routes.draw do
   end
 end
 ```
+
+## Step 4. Create Stimulus Controller
+
+1. `touch app/javascript/controllers/form_validation_controller.js` 
+
+```js
+// app/javascript/controllers/form_validation_controller.js
+import Rails from "@rails/ujs"
+import { Controller } from "stimulus"
+
+export default class extends Controller {
+  static targets  = [ "form", "output"]
+  static values   = { url: String }
+
+  handleChange(event) {
+    let input = event.target
+    Rails.ajax({
+      url: this.urlValue,
+      type: "POST",
+      data: new FormData(this.formTarget),
+      success: (data) => {
+        this.outputTarget.innerHTML = data;
+        input = document.getElementById(input.id);
+      },
+    })
+  }
+
+}
+```
+
+2. Update markup.
+
+```html+erb
+<%# app/views/posts/_form.html.erb %>
+<%= form_with(model: post, data: { form_validation_target: "form" }) do |form| %>
+  <% if post.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(post.errors.count, "error") %> prohibited this post from being saved:</h2>
+
+      <ul>
+        <% post.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :title %>
+    <%= form.text_field :title, data: { action: "form-validation#handleChange" } %>
+  </div>
+
+  <div class="field">
+    <%= form.label :body %>
+    <%= form.text_area :body, data: { action: "form-validation#handleChange" } %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit disabled: post.errors.any?  %>
+  </div>
+<% end %>
+```
+
+```html+erb
+<%# app/views/posts/new.html.erb %>
+<h1>New Post</h1>
+
+<div data-controller="form-validation" data-form-validation-target="output" data-form-validation-url-value="<%= form_validations_posts_path %>">
+  <%= render 'form', post: @post %>
+</div>
+
+<%= link_to 'Back', posts_path %>
+```
+
+```html+erb
+<%# app/views/posts/edit.html.erb %>
+<h1>Editing Post</h1>
+
+<div data-controller="form-validation" data-form-validation-target="output" data-form-validation-url-value="<%= form_validations_post_path(@post) %>">
+  <%= render 'form', post: @post %>
+</div>
+
+<%= link_to 'Show', @post %> |
+<%= link_to 'Back', posts_path %>
+```
+
+
