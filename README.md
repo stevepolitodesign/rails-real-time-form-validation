@@ -70,7 +70,7 @@ end
 
 **What's Going On?**
 
-- We don't have to namespace this controller, but it keeps things organized.
+We don't have to namespace this controller and route, but it keeps things organized. This will make it easier to create additional enpoints for other forms. There's probably an opportunity to use metaprogramming and concerns, but for now this works.
 
 ## Step 4: Create Stimulus Controller
 
@@ -86,20 +86,28 @@ export default class extends Controller {
   static values   = { url: String }
 
   handleChange(event) {
-    let input = event.target
     Rails.ajax({
       url: this.urlValue,
       type: "POST",
       data: new FormData(this.formTarget),
       success: (data) => {
         this.outputTarget.innerHTML = data;
-        input = document.getElementById(input.id);
       },
     })
   }
 
 }
 ```
+
+**What's Going On?**
+
+This Stimulus Controller simply hits the endpoint we created and updates the DOM with the response. 
+
+- We import `Rails` in order to use `Rails.ajax`
+- We set the `url` to the value we will pass to `data-form-validation-url-value` keepig thing flexible.
+- We set the `type` to `POST` to ensure we're always make a `POST` request to the endpoint.
+- We set the `data` to `new FormData(this.formTarget)` wich simply takes all the values from the form.
+  - Note that this includes the hidden [method](https://guides.rubyonrails.org/form_helpers.html#how-do-forms-with-patch-put-or-delete-methods-work-questionmark) input which will account for `PATCH` requsts. This is why we need to have `create` and `update` actions on our controller.     
 
 2. Update markup.
 
@@ -134,6 +142,13 @@ export default class extends Controller {
 <% end %>
 ```
 
+**What's Going On?**
+
+- We add a [target](https://stimulus.hotwire.dev/reference/targets) to our form in order to easily send the form data to the endpoint through our controller.
+- We add an [action](https://stimulus.hotwire.dev/reference/actions) to any input we want to listen to. When the change event is fired we hit our endpoint.
+- We conditionally disable the form by adding `disabled: post.errors.any?` to the submit button. 
+
+
 ```html+erb
 <%# app/views/posts/new.html.erb %>
 <h1>New Post</h1>
@@ -144,6 +159,7 @@ export default class extends Controller {
 
 <%= link_to 'Back', posts_path %>
 ```
+
 
 ```html+erb
 <%# app/views/posts/edit.html.erb %>
