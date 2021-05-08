@@ -211,7 +211,7 @@ Over server is hit everytime someone types into this form unless we debounce the
 
 If you open your browser and navigate to [http://localhost:3000/posts/new](http://localhost:3000/posts/new) you can inspect the response from the server and see that only one request was made instead of one per keystroke.
 
-![server response](public/debounce.gif)
+![debounce](public/debounce.gif)
 
 ## Step 6: Focus Input
 
@@ -270,4 +270,4 @@ export default class extends Controller {
 
 If you open your browser and navigate to [http://localhost:3000/posts/new](http://localhost:3000/posts/new) you'll see that the cursor is placed at the end.
 
-![server response](public/set_focus.gif)
+![set_focus](public/set_focus.gif)
