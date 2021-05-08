@@ -2,7 +2,7 @@
 
 Learn how to validate a form in real-time while conditionally preventing it from being submitted.
 
-[INSERT IMAGE]
+![demo](public/demo.gif)
 
 ## Step 1: Initial Set Up
 
@@ -47,9 +47,7 @@ end
 
 **What's Going On?**
 
-When we hit this endpoint we return the form partial as a JSON response. The form partial already handles the logic needed to render errors.
-
-[INSERT IMAGE]
+When we hit this endpoint we return the form partial as response from the server. The form partial already handles the logic needed to render errors.
 
 - We have access to `post_params` becuase we inherit from `PostsController`
 - We call [assign_attributes](https://api.rubyonrails.org/classes/ActiveModel/AttributeAssignment.html#method-i-assign_attributes) in the `update` action because we don't actually want to update the record in the database. We just want to update the record in memory so that we can have it validated.
@@ -160,7 +158,6 @@ This Stimulus Controller simply hits the endpoint we created and updates the DOM
 <%= link_to 'Back', posts_path %>
 ```
 
-
 ```html+erb
 <%# app/views/posts/edit.html.erb %>
 <h1>Editing Post</h1>
@@ -175,7 +172,7 @@ This Stimulus Controller simply hits the endpoint we created and updates the DOM
 
 If you open your browser and navigate to [http://localhost:3000/posts/new](http://localhost:3000/posts/new) you can inspect the response from the server and see our work in progress.
 
-[INSERT IMAGE]
+![server response](public/server_response.png)
 
 ## Step 5: Debounce Requests
 
@@ -214,13 +211,13 @@ Over server is hit everytime someone types into this form unless we debounce the
 
 If you open your browser and navigate to [http://localhost:3000/posts/new](http://localhost:3000/posts/new) you can inspect the response from the server and see that only one request was made instead of one per keystroke.
 
-[INSERT GIF]
+![server response](public/debounce.gif)
 
 ## Step 6: Focus Input
 
 You might have noticed that each time the form validates, the cursor is no longer focused on the input. Let's fix that.
 
-[INSERT IMAGE]
+![server response](public/no_focus.gif)
 
 ```js
 import Rails from "@rails/ujs"
@@ -273,4 +270,4 @@ export default class extends Controller {
 
 If you open your browser and navigate to [http://localhost:3000/posts/new](http://localhost:3000/posts/new) you'll see that the cursor is placed at the end.
 
-[INSERT IMAGE]
+![server response](public/set_focus.gif)
