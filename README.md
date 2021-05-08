@@ -173,7 +173,9 @@ This Stimulus Controller simply hits the endpoint we created and updates the DOM
 <%= link_to 'Back', posts_path %>
 ```
 
-If you open 
+If you open your browser and navigate to [http://localhost:3000/posts/new](http://localhost:3000/posts/new) you can inspect the response from the server and see our work in progress.
+
+[INSERT IMAGE]
 
 ## Step 5: Debounce Requests
 
@@ -194,19 +196,25 @@ export default class extends Controller {
   }
 
   handleChange(event) {
-    let input = event.target
     Rails.ajax({
       url: this.urlValue,
       type: "POST",
       data: new FormData(this.formTarget),
       success: (data) => {
         this.outputTarget.innerHTML = data;
-        input = document.getElementById(input.id);
       },
     })
   }
 }
 ```
+
+**What's Going On?**
+
+Over server is hit everytime someone types into this form unless we debounce these requests. By debouncing these requests we reduce the load on the server, and also reduce some jank on the form.
+
+If you open your browser and navigate to [http://localhost:3000/posts/new](http://localhost:3000/posts/new) you can inspect the response from the server and see that only one request was made instead of one per keystroke.
+
+[INSERT GIF]
 
 ## Step 6: Focus Input
 
@@ -251,5 +259,11 @@ export default class extends Controller {
   }
 }
 ```
+
+**What's Going On?**
+
+You might have noticed that each time the form validates, the cursor is no longer focused on the input. 
+
+[INSERT IMAGE]
 
 
