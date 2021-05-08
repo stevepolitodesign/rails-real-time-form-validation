@@ -1,8 +1,8 @@
 # Real-time Form Validation in Rails
 
-## Demo
+Learn how to validate a form in real-time while conditionally preventing it from being submitted.
 
-## Features
+[INSERT IMAGE]
 
 ## Step 1: Initial Set Up
 
@@ -218,6 +218,10 @@ If you open your browser and navigate to [http://localhost:3000/posts/new](http:
 
 ## Step 6: Focus Input
 
+You might have noticed that each time the form validates, the cursor is no longer focused on the input. Let's fix that.
+
+[INSERT IMAGE]
+
 ```js
 import Rails from "@rails/ujs"
 import { Controller } from "stimulus"
@@ -262,8 +266,11 @@ export default class extends Controller {
 
 **What's Going On?**
 
-You might have noticed that each time the form validates, the cursor is no longer focused on the input. 
+- We store the focused `input` as a variable by calling `let input = event.target`.
+  -  We do this because the form's makrup get's replaced after the request to the server is made. This allows is to still reference the `input` later by calling `input = document.getElementById(input.id);`. There's probably a better way to do this, but it works.
+- We can't just call [focus()](https://developer.mozilla.org/en-US/docs/Web/API/HTMLOrForeignElement/focus) on the `input` because it will place the cursor at the beginning. Fortunately a quick internet search lead me to [this solution](https://css-tricks.com/snippets/javascript/move-cursor-to-end-of-input/).
+  - Note that I added `element.focus();` after `typeof element.selectionStart == "number"`.  
+
+If you open your browser and navigate to [http://localhost:3000/posts/new](http://localhost:3000/posts/new) you'll see that the cursor is placed at the end.
 
 [INSERT IMAGE]
-
-
