@@ -52,9 +52,9 @@ When we hit this endpoint we return the form partial as a JSON response. The for
 [INSERT IMAGE]
 
 - We have access to `post_params` becuase we inherit from `PostsController`
-- We call `assign_attributes` in the `update` action because we don't actually want to update the record. We just want to update the record in memory so that we can have it validated.
+- We call [assign_attributes](https://api.rubyonrails.org/classes/ActiveModel/AttributeAssignment.html#method-i-assign_attributes) in the `update` action because we don't actually want to update the record in the database. We just want to update the record in memory so that we can have it validated.
 - We call `@post.valid?` and `@post.validate` in the `update` and `create` actions respectively to ensure any validation errors get sent to the partial.
-- We only respond with JSON because we're hitting this endpoint with AJAX. We pass `formats: [:html]` to ensure the partial is rendered. Othwerwise Rails would looke for `_form.json.erb`.  
+- We only respond with JSON because we're hitting this endpoint with AJAX. We pass `formats: [:html]` to ensure the correct partial is rendered. Othwerwise Rails would look for `_form.json.erb`.  
 
 3. Create a namespaced route for the endpoints.
 
