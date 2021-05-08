@@ -31,7 +31,7 @@ class FormValidations::PostsController < PostsController
     @post.assign_attributes(post_params)
     @post.valid?
     respond_to do |format|
-      format.json { render partial: 'posts/form', locals: { post: @post }, formats: [:html] } 
+      format.text { render partial: 'posts/form', locals: { post: @post }, formats: [:html] } 
     end
   end
   
@@ -39,7 +39,7 @@ class FormValidations::PostsController < PostsController
     @post = Post.new(post_params)
     @post.validate
     respond_to do |format|
-      format.json { render partial: 'posts/form', locals: { post: @post }, formats: [:html] } 
+      format.text { render partial: 'posts/form', locals: { post: @post }, formats: [:html] } 
     end
   end
 end
@@ -172,6 +172,8 @@ This Stimulus Controller simply hits the endpoint we created and updates the DOM
 <%= link_to 'Show', @post %> |
 <%= link_to 'Back', posts_path %>
 ```
+
+If you open 
 
 ## Step 5: Debounce Requests
 
